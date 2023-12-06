@@ -3,39 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Search Widget</title>
-    <!-- Widget JavaScript bundle -->
-    <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
+    <title>Abacus Cambridge Partners</title>	
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f7f7f7;
+			font-family: 'Arial', sans-serif;
+			margin: 0;
+			padding-top: 80px; /* Space for fixed navbar */
+			padding-right: 400px; /* Space for chatbot sidebar */
+			padding-bottom: 400px;
+			box-sizing: border-box;
+			overflow-x: hidden; /* Prevents horizontal scroll */
+		}
+
+		.navbar {
+            background-color: #e0e0e0; /* Updated to grey */
+            position: fixed;
+            width: calc(100% - 400px); /* Navbar width minus chatbot sidebar */
+            z-index: 1030;
+            top: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Added shadow */
         }
 
-        #searchWidgetTrigger {
-            padding: 10px;
-            font-size: 16px;
-            width: 50%; /* Adjust width as necessary */
-            max-width: 300px; /* Maximum width */
+        .navbar-brand img {
+            height: 40px;
         }
+
+
+		.navbar-dark .navbar-nav .nav-link {
+			color: #0f4394; /* Darker color for better visibility */
+		}
+		
+		/* Navbar link styles */
+		.navbar-nav .nav-link {
+			color: #0f4394; /* All links black */
+			transition: color 0.3s; /* Smooth transition for color change */
+		}
+
+		.navbar-nav .nav-link:hover,
+		.navbar-nav .nav-link:focus {
+			color: #fff; /* Links white on hover/focus */
+			text-decoration: none; /* Remove default underline */
+		}
+
+		.navbar-nav .nav-link::after {
+			content: '';
+			display: block;
+			margin: auto;
+			height: 2px;
+			width: 0px;
+			background: transparent;
+			transition: width 0.5s ease, background-color 0.5s ease;
+		}
+
+		.navbar-nav .nav-link:hover::after,
+		.navbar-nav .nav-link:focus::after {
+			width: 100%; /* Full width on hover/focus */
+			background: #fff; /* White underline */
+		}
+
+
+        footer {
+			background-color: #333;
+			color: white;
+			padding: 4px 0; /* Reduced padding */
+			text-align: center;
+			position: fixed;
+			bottom: 0;
+			width: calc(100% - 400px);
+			z-index: 1020;
+			font-size: 80%; /* Reduced font size */
+		}
+
+		df-messenger {
+			df-messenger-button-titlebar-color: #0d4295;
+			df-messenger-chat-background-color: #fafafa;
+			df-messenger-send-icon: #0d4295;
+			z-index: 1029;
+			position: fixed;
+			top: 0px; 
+			right: 0;
+			width: 400px; /* Chatbot sidebar width */
+			height: calc(100% - 100px); /* Height adjusted to align with navbar */
+		}
+
+        /* Styling for content sections */
+        .container {
+			padding-top: 20px; /* Space below the navbar */
+		}
+
+		.section {
+			background-color: #f4f4f4;
+			color: #012169;
+			margin-bottom: 20px;
+			padding: 20px;
+			border-radius: 8px;
+			position: relative;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		.section img {
+			width: 100%;
+			height: auto;
+			border-radius: 8px;
+			margin-bottom: 20px; /* Space between image and text */
+		}
+		.section .flow-diagram {
+			max-width: 75%; 
+			max-height: 75%;/* Adjust this value to scale the size of the diagram */
+			display: block; /* Images are block level to take max-width into account */
+			margin: 0 0 20px 0;
+		}
+		.section .large-flow-diagram {
+			max-width: 50%; /* Adjust this value as needed for larger diagrams */
+			
+		}
+		.section .extra-large-flow-diagram {
+			max-width: 30%; 
+		}
+
+		#searchWidgetContainer {
+	            display: flex;
+	            align-items: center;
+	            justify-content: center;
+	            margin-left: auto; /* Aligns the search to the right */
+	        }
+	
+	        .navbar .search-container {
+	            padding: .5rem 1rem; /* Padding to match the navbar padding */
+	            display: flex;
+	            align-items: center;
+	        }
+	
+	        .navbar #searchWidgetTrigger {
+	            flex-grow: 1;
+	            margin-left: 1rem; /* Spacing from the nav links */
+	            max-width: 200px; /* Maximum width of search input */
+	        }
+        @media (max-width: 991px) {
+    body {
+        padding-top: 56px; /* Reset padding for smaller screens */
+        padding-right: 0; /* Chatbot will overlay content */
+    }
+
+    .navbar {
+        width: 100%; /* Full width navbar */
+        position: static; /* Navbar scrolls with the page */
+    }
+
+    footer {
+        width: 100%; /* Full width footer */
+        position: static; /* Footer scrolls with the page */
+		background-color: #f4f4f4;
+    }
+
+    df-messenger {
+        width: 100%; /* Full width chatbot */
+        height: auto;
+        position: static; /* Chatbot scrolls with the page */
+    }
+}
     </style>
 </head>
 <body>
 
-<!-- Search widget element is not visible by default -->
-<gen-search-widget
-    configId="0e436de0-07ec-4693-8851-687a68e5a3f4"
-    triggerId="searchWidgetTrigger">
-</gen-search-widget>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">
+        <img src="https://27058982.fs1.hubspotusercontent-eu1.net/hubfs/27058982/log-dark.png" alt="Logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="#home"><strong>Home</strong></a></li>
+            <li class="nav-item"><a class="nav-link" href="#workflow"><strong>Workflow</strong></a></li>
+            <li class="nav-item"><a class="nav-link" href="#architecture"><strong>Architecture</strong></a></li>
+            <li class="nav-item"><a class="nav-link" href="#phone-integrations"><strong>Telephony Integrations</strong></a></li>
+		<li class="nav-item"><a class="nav-link" href="#text-integrations"><strong>Text Integrations</strong></a></li>
+		<li class="nav-item"><a class="nav-link" href="#demo-video"><strong>Demo Video</strong></a></li>
+        </ul>
+    </div>
+	<div class="search-container">
+        <gen-search-widget
+          configId="0e346de0-07ec-4693-8851-687a68e5a3f4"
+          triggerId="searchWidgetTrigger">
+        </gen-search-widget>
+        <input placeholder="Vertex AI Search here" id="searchWidgetTrigger" class="form-control"/>
+    </div>
+</nav>
 
-<!-- Element that opens the widget on click. It does not have to be an input -->
-<input placeholder="Search here" id="searchWidgetTrigger" />
+<!-- Main Content -->
+<div class="container">
+    <section id="home" class="section">
+        <img src="./technology-stack.png" alt="Technology Stack">
+        <h2>Technology & Product Stack</h2>
+    </section>
+	
+	<section id="architecture" class="section">
+		<h3>High-level Arcitecture Diagram</h3>
+		<img src="./high-level-architecture-diagram.png" alt="Highlevel Arcitecture Diagram" class="flow-diagram">
+		<h3>Authentication Arcitecture Diagram</h3>
+		<img src="./authentication-architecture.png" alt="Authentication Arcitecture Diagram" class="flow-diagram">
+		<h3>Knowledge Base Architecture Diagram</h3>
+		<img src="./knowledge-base-architecture.png" alt="Knowledge Base Architecture Diagram">
+		<h3>Schedule A Meeting Architecture Diagram</h3>
+		<img src="./meeting-schedule-architecture.png" alt="Schedule A Meeting Architecture Diagram">
+        <h2>Chatbot Technical Architecture</h2>
+    </section>
+
+    <section id="workflow" class="section">
+	    <h3>Default Flow Diagram</h3>
+		<img src="./default-flow.png" alt="Default Flow Diagram" class="flow-diagram large-flow-diagram">
+		<h3>Auth Abacus Email Flow Diagram</h3>
+		<img src="./auth-abacus-email-flow.png" alt="Auth Abacus Email Flow Diagram" class="flow-diagram">
+	    <h3>Schedule a Meeting Flow Diagram</h3>
+		<img src="./schedule-a-meeting-flow.png" alt="Schedule a Meeting Flow Diagram" class="flow-diagram extra-large-flow-diagram">
+	    <h3>Project Insights Flow Diagram</h3>
+		<img src="./projects-insights-flow.png" alt="Project Insights Flow Diagram" class="flow-diagram extra-large-flow-diagram">
+	    <h3>Anything Else Flow Diagram</h3>
+		<img src="./anything-else-flow.png" alt="Anything Else Flow Diagram" class="flow-diagram large-flow-diagram">
+	    <h3>Survey Flow Diagram</h3>
+		<img src="./survey-flow.png" alt="Survey Flow Diagram" class="flow-diagram extra-large-flow-diagram">
+        <h2>Conversation Workflow</h2>
+    </section>
+
+	<section id="text-integrations" class="section">
+		<img src="./text-integrations.png" alt="Text Based Integrations">
+        <h2>Text Based Integrations</h2>
+    </section>
+	
+    <section id="phone-integrations" class="section">
+		<img src="./phone-integrations.png" alt="Telephony Integrations" class="flow-diagram large-flow-diagram">
+        <h2>Telephony Integrations</h2>
+    </section>
+
+	<section id="demo-video" class="section">
+		<iframe width="60%" height="450" src="https://www.youtube.com/embed/BjH2h8hHx0c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <h2>Demo Video</h2>
+    </section>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+
+        <div style="font-size: 12px; color: #999999; text-align: center;">
+            &copy; Abacus Cambridge Partners. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- Chatbot -->
+<df-messenger
+  project-id="abacus-demo-2023"
+  agent-id="deb71627-0d70-4c43-beab-ec4f14a25e64"
+  language-code="en">
+  <df-messenger-chat
+   chat-title="Try Me Now!">
+  </df-messenger-chat>
+</df-messenger>
+
+<!-- Scripts for Bootstrap components -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Dialogflow Messenger script -->
+<script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+
+<!-- Move the Search Widget JavaScript bundle here, right before the closing body tag -->
+<script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
+
+<script>
+// Ensure df-messenger is loaded
+document.addEventListener('dfMessengerLoaded', function (event) {
+  const dfMessenger = document.querySelector('df-messenger');
+  
+});
+</script>
 
 </body>
 </html>
