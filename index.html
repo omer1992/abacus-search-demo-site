@@ -3,37 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Widget Demo</title>
+    <title>Simple Search Widget</title>
     <!-- Widget JavaScript bundle -->
     <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
         }
 
         #searchWidgetTrigger {
-            width: 100%;
             padding: 10px;
-            margin: 10px 0;
             font-size: 16px;
+            width: 50%; /* Adjust width as necessary */
+            max-width: 300px; /* Maximum width */
         }
     </style>
 </head>
 <body>
-    <h1>Search Widget Demo</h1>
-    
-    <!-- Search widget element -->
-    <gen-search-widget
-      configId="0e436de0-07ec-4693-8851-687a68e5a3f4"
-      triggerId="searchWidgetTrigger">
-    </gen-search-widget>
 
-    <!-- Element that opens the widget on click. It does not have to be an input -->
-    <input placeholder="Search here" id="searchWidgetTrigger" />
-    
-    <script>
-        // If there are additional JavaScript actions to initialize the widget, they go here.
-    </script>
+<!-- Search widget element is not visible by default -->
+<gen-search-widget
+    configId="0e436de0-07ec-4693-8851-687a68e5a3f4"
+    triggerId="searchWidgetTrigger">
+</gen-search-widget>
+
+<!-- Element that opens the widget on click. It does not have to be an input -->
+<input placeholder="Search here" id="searchWidgetTrigger" />
+
 </body>
 </html>
